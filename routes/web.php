@@ -23,4 +23,4 @@ use Illuminate\Support\Facades\Redirect;
 
 Route::redirect('/', 'jobs');
 Route::resource('jobs', JobController::class)
-    ->only(['index']);
+    ->only(['index', 'show']);
