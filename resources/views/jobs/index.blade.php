@@ -30,7 +30,7 @@
                     </x-radio-input>
                 </div>
             </div>
-            <x-button class="w-full">Filter</x-button>
+            <x-button class="w-full">FILTER</x-button>
         </form>
     </x-card>
     @foreach ($jobs as $job)
