@@ -4,6 +4,15 @@
         <p class="text-justify text-sm mb-4">
             {!! nl2br(e($job->description)) !!}
         </p>
+        @can('apply', $job)
+            <x-link-button :href="route('job.application.create', $job)">
+                Apply
+            </x-link-button>
+        @else
+            <div class="text-sm text-center text-slate-500 font-medium">
+                You have already applied to this job.
+            </div>
+        @endcan
     </x-job-card>
     <x-card class="mb-4">
         <h2 class="mb-4 text-lg font-medium">
@@ -14,7 +23,7 @@
                 <div class="flex justify-between mb-4">
                     <div>
                         <diV class="text-slate-500 font-medium hover:text-blue-500">
-                            <a href="{{route('jobs.show', $otherJob)}}">
+                            <a href="{{ route('jobs.show', $otherJob) }}">
                                 {{ $otherJob->title }}
                             </a>
                         </div>
