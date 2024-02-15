@@ -3,7 +3,7 @@
         Sign in to your account
     </h1>
     <x-card class="py-8 px-16 bg-opacity-20">
-        <form action="" method="POST">
+        <form action="{{route('auth.store')}}" method="POST">
             @csrf
             <div class="mb-8">
                 <label for="email" class="mb-2 block text-sm font-medium text-slate-500">Email</label>
@@ -25,7 +25,7 @@
                     <a href="#" class="text-indigo-500 hover:underline"> Forget password? </a>
                 </div>
             </div>
-            <x-button class="w-full border-0 bg-fuchsia-300 text-center text-white rounded py-2 font-medium hover:bg-fuchsia-400">
+            <x-button class="w-full bg-fuchsia-400">
                 LOG IN
             </x-button>
         </form>
