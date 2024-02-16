@@ -35,7 +35,7 @@ class JobApplicationController extends Controller
         $job->jobApplications()->create([
             'user_id' => auth()->id(),
             ...$request->validate([
-                'expected_salary' => 'required|min:1|max:1000000'
+                'expected_salary' => 'required|integer|min:1|max:1000000'
             ])
         ]);
 
