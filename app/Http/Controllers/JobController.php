@@ -10,7 +10,7 @@ class JobController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Job $job)
     {
         $filters = request()->only(
             'search',
