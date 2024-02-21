@@ -17,6 +17,7 @@ class AuthController extends Controller
         return view('auth.create');
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
