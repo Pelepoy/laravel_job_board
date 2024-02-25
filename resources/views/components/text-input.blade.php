@@ -22,7 +22,7 @@
         'pr' => $formRef,
         'ring-slate-300' => !$errors->has($name),
         "ring-red-300" => $errors->has($name)
-    ]) value="{{ old($name, $value) }}" ></textarea>
+    ]) >{{ old($name, $value) }}</textarea>
     @endif
     @error($name)
         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
