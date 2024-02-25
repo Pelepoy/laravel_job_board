@@ -16,6 +16,11 @@ class JobPolicy
         return true;
     }
 
+    public function viewAnyEmployer(User $user): bool
+    {
+        return true;
+    }
+
     /**
      * Determine whether the user can view the model.
      */
