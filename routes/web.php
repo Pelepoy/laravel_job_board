@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Redirect;
+use App\Http\Controllers\MyJobController;
+use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\MyJobApplicationController;
 
@@ -40,4 +42,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('my-job-application', MyJobApplicationController::class)
         ->only(['index', 'destroy']);
+
+    Route::resource('employer', EmployerController::class)
+        ->only(['create', 'store']);
+
+    Route::middleware('employer') // this middleware is defined in app/Http/Kernel.php
+        ->resource('my-jobs', MyJobController::class);
 });
