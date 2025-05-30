@@ -50,5 +50,6 @@ jobs:
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
+          APP_KEY: base64:$(php artisan key:generate --show)
         run: |
           vendor/bin/phpunit --stop-on-failure --testdox
