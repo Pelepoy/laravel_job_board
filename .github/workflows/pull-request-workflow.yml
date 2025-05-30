@@ -1,6 +1,6 @@
 name: Pull Request Worfkflow
 
-on 
+on:
   pull_request: 
 
 jobs:
