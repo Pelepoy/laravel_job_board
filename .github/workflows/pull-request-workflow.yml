@@ -4,7 +4,7 @@ on:
   pull_request: 
 
 jobs:
-  composer:
+  laravel-test-suite:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
