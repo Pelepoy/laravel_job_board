@@ -20,7 +20,8 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           coverage: xdebug
-          tools: composer:v2
+          extensions: mbstring, xml, ctype, json, fileinfo, pdo, sqlite3, xdebug
+          ini-values: xdebug.mode=coverage
 
       - name: Get Composer cache directory
         id: composer-cache
@@ -49,4 +50,5 @@ jobs:
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
-        run: vendor/bin/phpunit --coverage-text
+        run: |
+          vendor/bin/phpunit --stop-on-failure --testdox
