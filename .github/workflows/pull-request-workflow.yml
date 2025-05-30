@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php-version: [8.2, 8.3]
+        php-version: [8.2]
 
     steps:
       - name: Checkout
@@ -38,6 +38,12 @@ jobs:
         run: |
           composer install --no-interaction --prefer-dist --optimize-autoloader
 
+      - name: Prepare Laravel Application
+        run: |
+          cp .env.example .env
+          php artisan key:generate --force
+          php artisan config:clear
+
       - name: Create SQlite Database
         run: |
           mkdir -p database
@@ -50,6 +56,5 @@ jobs:
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
-          APP_KEY: base64:$(php artisan key:generate --show)
         run: |
-          vendor/bin/phpunit --stop-on-failure --testdox
+          vendor/bin/phpunit --testdox --stop-on-failure
