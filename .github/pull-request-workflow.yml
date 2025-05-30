@@ -1,0 +1,52 @@
+name: Pull Request Worfkflow
+
+on 
+  pull_request: 
+
+jobs:
+  composer:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        php-version: [8.2, 8.3]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: xdebug
+          tools: composer:v2
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Create SQlite Database
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+
+      - name: Update Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+
+      - name: Execute Tests
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
+        run: vendor/bin/phpunit --coverage-text
