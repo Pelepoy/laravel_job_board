@@ -57,10 +57,24 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ${{ secrets.TARGET }}
+
+            # Run migrations
             php artisan migrate --force
+      
+            # Clear any existing caches
+            php artisan config:clear
+            php artisan route:clear
+            php artisan view:clear
+            php artisan cache:clear
+      
+            # Rebuild caches
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
-            php artisan optimize
 
+            # Link storage (safe to rerun if already exists)
+            php artisan storage:link || true
+
+            # Optimize framework bootstrap files
+            php artisan optimize
 
