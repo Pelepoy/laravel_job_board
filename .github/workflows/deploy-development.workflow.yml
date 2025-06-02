@@ -32,6 +32,12 @@ jobs:
 
       - name: Build Assets
         run: npm run build
+
+      - name: Debug SSH Connection
+        run: |
+          echo "Testing SSH connection..."
+          ssh -v -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}
+
       - name: Synchronize files to server
         uses: easingthemes/ssh-deploy@v2.1.5
         env:
@@ -41,8 +47,9 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.TARGET }}
           REMOTE_PORT: "22"
-          ARGS: "-rltgoDzvO --delete"
+          ARGS: "-rltgoDzvO --delete -v"
           EXCLUDE: ".git*, .env, node_modules/, vendor/"
+          DEBUG: "true"
 
       - name: Run Remote Deployment Script/Artisan Commands
         uses: appleboy/ssh-action@v0.1.6
