@@ -39,7 +39,7 @@ jobs:
           TARGET: ${{ secrets.TARGET }}
 
       - name: Run Remote Deployment Script/Artisan Commands
-      - uses: appleboy/ssh-action@v0.1.7
+        uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
@@ -52,4 +52,4 @@ jobs:
             php artisan view:cache
             php artisan optimize
 
-        
+
