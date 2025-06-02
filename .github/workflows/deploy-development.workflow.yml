@@ -33,6 +33,15 @@ jobs:
       - name: Build Assets
         run: npm run build
 
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          eval $(ssh-agent -s)
+          ssh-add ~/.ssh/deploy_key
+          echo "SSH Command to login: ssh -i ~/.ssh/deploy_key ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}"
+
       - name: Debug SSH Connection
         run: |
           echo "Testing SSH connection..."
@@ -45,7 +54,7 @@ jobs:
           SOURCE: "."
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: ${{ secrets.TARGET }}
+          TARGET: "/var/www/laravel_job_board"  # Updated with actual path
           REMOTE_PORT: "22"
           ARGS: "-rltgoDzvO --delete -v"
           EXCLUDE: ".git*, .env, node_modules/, vendor/"
