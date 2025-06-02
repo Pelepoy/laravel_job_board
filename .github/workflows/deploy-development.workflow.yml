@@ -40,7 +40,15 @@ jobs:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.TARGET }}
-
+          EXCLUDE: |
+            .git*
+            .env
+            node_modules/**
+            vendor/**
+            storage/*.key
+            tests
+            .github/**
+          ARGS: "-rltgoDzvO --no-perms --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r"
       - name: Run Remote Deployment Script/Artisan Commands
         uses: appleboy/ssh-action@v0.1.6
         with:
