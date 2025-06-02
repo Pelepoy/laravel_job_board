@@ -32,14 +32,6 @@ jobs:
 
       - name: Build Assets
         run: npm run build
-
-      - name: Setup SSH Keys and known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
-
       - name: Synchronize files to server
         uses: easingthemes/ssh-deploy@v2.1.5
         env:
