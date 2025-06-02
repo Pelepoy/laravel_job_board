@@ -26,7 +26,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install NPM Dependencies
+      - name: Install NPM Packages
+        run: npm ci
+
+      - name: Build Assets
         run: npm run build
 
       - name: Synchronize files to server
