@@ -1,9 +1,9 @@
-name: Deploy Laravel-Job Board to Development
+name: Deploy Laravel (Development)
 
 on:
   push:
     branches:
-     - development
+      - development
 
 jobs:
   deploy-development:
@@ -17,22 +17,23 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
 
-      - name: Install Composer Dependencies
-        run: composer install -q --optimize-autoloader --no-interaction --prefer-dist --no-ansi --no-scripts --no-progress
-      
-      - name: Install Node.js Dependencies
+      - name: Install Composer Dependencies Locally
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install NPM Packages
         run: npm ci
 
-      - name: Build Assets
+      - name: Build Frontend Assets
         run: npm run build
-      - name: Synchronize files to server
+
+      - name: Sync Files to Development Server
         uses: easingthemes/ssh-deploy@v2.1.5
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -48,8 +49,9 @@ jobs:
             storage/*.key
             tests
             .github/**
-          ARGS: "-rltgoDzvO --no-perms --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r"
-      - name: Run Remote Deployment Script/Artisan Commands
+          ARGS: "-rltgoDzvO --no-perms"
+
+      - name: Run Remote Artisan and Composer
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.REMOTE_HOST }}
@@ -58,23 +60,25 @@ jobs:
           script: |
             cd ${{ secrets.TARGET }}
 
-            # Run migrations
+            # Install dependencies (with dev dependencies)
+            composer install --no-interaction --prefer-dist
+
+            # Migrate database
             php artisan migrate --force
-      
-            # Clear any existing caches
+
+            # Clear caches
             php artisan config:clear
             php artisan route:clear
             php artisan view:clear
             php artisan cache:clear
-      
+
             # Rebuild caches
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
 
-            # Link storage (safe to rerun if already exists)
+            # Create storage link
             php artisan storage:link || true
 
             # Optimize framework bootstrap files
             php artisan optimize
-
